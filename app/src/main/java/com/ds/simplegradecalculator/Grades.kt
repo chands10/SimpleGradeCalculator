@@ -14,7 +14,7 @@ class Grades(rawGrades: Map<String, Double>) {
     // calculate the total grade and return it
     fun calculateGrade(): Double {
         var total = 0.0
-        for (g in grades) total += g.value.scores.sum() * g.value.weighting
+        for (g in grades) total += g.value.scores.average() * g.value.weighting
         return total
     }
 }
