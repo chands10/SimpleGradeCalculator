@@ -10,8 +10,8 @@ class Grades(private val rawGrades: Map<String, Double>) {
 
     @Throws(RuntimeException::class)
     private fun checkRep() {
-        if (rawGrades.isNotEmpty() &&  rawGrades.values.sum() != 1.0) {
-            throw RuntimeException("Weighting must be equal to 1")
+        if (rawGrades.isNotEmpty() &&  rawGrades.values.sum() != 100.0) {
+            throw RuntimeException("Weighting must be equal to 100")
         }
     }
 

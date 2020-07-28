@@ -7,8 +7,8 @@ import org.junit.Before
 
 class GradesTest {
     private val e = Grades(mapOf())
-    private val f = Grades(mapOf("tests" to 1.0))
-    private val g = Grades(mapOf("tests" to 0.6, "projects" to 0.2, "quizzes" to 0.2))
+    private val f = Grades(mapOf("tests" to 100.0))
+    private val g = Grades(mapOf("tests" to 60.0, "projects" to 20.0, "quizzes" to 20.0))
 
     @Before
     fun setUp() {
@@ -22,8 +22,8 @@ class GradesTest {
         Grades(mutableMapOf())
 
         // sum of weightings = 1
-        Grades(mapOf("tests" to 1.0))
-        Grades(mapOf("tests" to 0.4, "quizzes" to 0.2, "hws" to 0.2, "labs" to 0.2))
+        Grades(mapOf("tests" to 100.0))
+        Grades(mapOf("tests" to 40.0, "quizzes" to 20.0, "hws" to 20.0, "labs" to 20.0))
     }
 
     @Test
