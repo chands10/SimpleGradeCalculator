@@ -1,6 +1,7 @@
 package com.ds.simplegradecalculator
-// [rawGrades] with category as key and weight as value
-class Grades(private val rawGrades: Map<String, Double>) {
+// [rawGrades] with category as key and weight as value and string [weightingError]
+class Grades(private val rawGrades: Map<String, Double>,
+             private val weightingError: String = "Weighting must be equal to 100") {
     // category with percentage of grade [weighting] and test grades [scores]
     class Category(val weighting: Double) {
         val scores = mutableListOf<Double>()
@@ -11,7 +12,7 @@ class Grades(private val rawGrades: Map<String, Double>) {
     @Throws(RuntimeException::class)
     private fun checkRep() {
         if (rawGrades.isNotEmpty() &&  rawGrades.values.sum() != 100.0) {
-            throw RuntimeException("Weighting must be equal to 100")
+            throw RuntimeException(weightingError)
         }
     }
 
