@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">Simple Grade Calculator</string>
     <string name="weightingError">Weighting must be equal to 100</string>
+    <string name="category">Category</string>
 </resources>
