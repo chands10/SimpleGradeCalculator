@@ -2,4 +2,8 @@
     <string name="app_name">Simple Grade Calculator</string>
     <string name="weightingError">Weighting must be equal to 100</string>
     <string name="category">Category</string>
+    <string name="percent">%</string>
+    <string name="step1">Step 1: Add Categories</string>
+    <string name="category_name">Category Name</string>
+    <string name="percent_grade">% of Grade</string>
 </resources>
