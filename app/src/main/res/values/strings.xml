@@ -6,4 +6,6 @@
     <string name="step1">Step 1: Add Categories</string>
     <string name="category_name">Category Name</string>
     <string name="percent_grade">% of Grade</string>
+    <string name="add_another">Add Another</string>
+    <string name="next_step">Continue</string>
 </resources>
