@@ -3,7 +3,7 @@ package com.ds.simplegradecalculator
 class Grades(private val rawGrades: Map<String, Double>,
              private val weightingError: String = "Weighting must be equal to 100") {
     // category with percentage of grade [weighting] and test grades [scores]
-    class Category(val weighting: Double) {
+    private class Category(val weighting: Double) {
         val scores = mutableListOf<Double>()
     }
     private val c = checkRep()
