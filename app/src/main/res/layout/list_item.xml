@@ -16,7 +16,7 @@
         android:ems="10"
         android:hint="@string/category"
         android:importantForAutofill="no"
-        android:inputType="text"
+        android:inputType="textCapSentences"
         android:singleLine="true" />
 
     <EditText
