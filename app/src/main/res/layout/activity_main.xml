@@ -59,40 +59,12 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <ListView
+            android:id="@+id/categories_list"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <EditText
-                android:id="@+id/editTextCategory0"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/catLeft"
-                android:layout_marginLeft="@dimen/catLeft"
-                android:layout_marginEnd="@dimen/catMiddle"
-                android:layout_marginRight="@dimen/catMiddle"
-                android:layout_weight=".7"
-                android:ems="10"
-                android:hint="@string/category"
-                android:importantForAutofill="no"
-                android:inputType="text"
-                android:singleLine="true" />
-
-            <EditText
-                android:id="@+id/editTextWeight0"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="@dimen/catRight"
-                android:layout_marginRight="@dimen/catRight"
-                android:layout_weight=".3"
-                android:ems="10"
-                android:hint="@string/percent"
-                android:importantForAutofill="no"
-                android:inputType="numberDecimal"
-                android:singleLine="true" />
-
-        </LinearLayout>
+            android:divider="@null"
+            android:dividerHeight="0dp" />
 
         <Button
             android:id="@+id/button1"

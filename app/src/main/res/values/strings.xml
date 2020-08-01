@@ -8,4 +8,5 @@
     <string name="percent_grade">% of Grade</string>
     <string name="add_another">Add Another</string>
     <string name="next_step">Continue</string>
+    <string name="blank_field">This field cannot be blank</string>
 </resources>
