@@ -5,7 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity">
-    <!--    line 2: xmlns:app="http://schemas.android.com/apk/res-auto"-->
 
     <!-- TODO: Add scrolling support -->
     <LinearLayout
@@ -101,6 +100,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/catLeft"
             android:layout_marginLeft="@dimen/catLeft"
+            android:onClick="addCategory"
             android:text="@string/add_another" />
 
         <LinearLayout
