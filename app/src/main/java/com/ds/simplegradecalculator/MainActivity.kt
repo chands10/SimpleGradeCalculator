@@ -70,32 +70,35 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
+    // Adapter for categories_list
     private class CategoryAdapter: RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
-
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
         ): CategoryAdapter.ViewHolder {
-            val view = LayoutInflater.from(parent.context).inflate(R.layout.list_item, parent, false)
+            val view = LayoutInflater.from(parent.context).inflate(viewType, parent, false)
             return ViewHolder(view)
         }
 
         override fun onBindViewHolder(holder: CategoryAdapter.ViewHolder, position: Int) {
-            val item = CategoryContent.ITEMS[position]
-            holder.mCategoryLabel.setText(item.category)
-            holder.mWeightLabel.setText(item.weight)
+            if (getItemViewType(position) == R.layout.list_item) {
+                val item = CategoryContent.ITEMS[position]
+                holder.mCategoryLabel!!.setText(item.category)
+                holder.mWeightLabel!!.setText(item.weight)
+            }
         }
 
-        override fun getItemCount(): Int {
-            return CategoryContent.size()
-        }
+        override fun getItemCount() = CategoryContent.size() + 1 // add 1 to account for button
+
+        override fun getItemViewType(position: Int) =
+            if (position == itemCount - 1) R.layout.add_another_button else R.layout.list_item
 
         inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-            val mCategoryLabel = view.findViewById<EditText>(R.id.editTextCategory)
-            val mWeightLabel = view.findViewById<EditText>(R.id.editTextWeight)
+            val mCategoryLabel: EditText? = view.findViewById<EditText>(R.id.editTextCategory)
+            val mWeightLabel: EditText? = view.findViewById<EditText>(R.id.editTextWeight)
 
-            init {
-                mCategoryLabel.addTextChangedListener(object: TextWatcher {
+            init { // set category and weight when text changed
+                mCategoryLabel?.addTextChangedListener(object: TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -103,7 +106,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 })
 
-                mWeightLabel.addTextChangedListener(object: TextWatcher {
+                mWeightLabel?.addTextChangedListener(object: TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
@@ -114,6 +117,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // list that holds each row's category and weight
     object CategoryContent {
         val ITEMS = mutableListOf<CategoryItem>()
         init {
