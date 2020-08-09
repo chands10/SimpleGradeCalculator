@@ -25,6 +25,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Add Another button: adds another field to input text
+    // TODO: Set focus on last EditText
     fun addCategory(view: View) {
         CategoryContent.addItem()
         categories_list.adapter?.notifyDataSetChanged()
@@ -32,6 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     // Continue button: Verifies scores, creates Grades class, and continues onto the next page
     // TODO: Pass Grades g into next activity
+    // TODO: Update implementation to exclusively use CategoryContent
     fun createGrades(view: View) {
         val rawGrades = mutableMapOf<String, Double>()
         for (i in 0 until CategoryContent.size()) {
@@ -98,6 +100,7 @@ class MainActivity : AppCompatActivity() {
         override fun getItemViewType(position: Int) =
             if (position == itemCount - 1) R.layout.add_another_button else R.layout.list_item
 
+        // TODO: Move EditText errors here
         inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
             val mCategoryLabel: EditText? = view.findViewById<EditText>(R.id.editTextCategory)
             val mWeightLabel: EditText? = view.findViewById<EditText>(R.id.editTextWeight)
