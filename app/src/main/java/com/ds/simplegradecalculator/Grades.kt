@@ -12,7 +12,7 @@ class Grades(private val rawGrades: Map<String, Double>,
     @Throws(RuntimeException::class)
     private fun checkRep() {
         val sum = rawGrades.values.sum()
-        if (rawGrades.isNotEmpty() && (sum < 99.9 || sum > 100.1)) {
+        if (rawGrades.isNotEmpty() && (sum < 99.89 || sum > 100.101)) {
             throw RuntimeException(weightingError)
         }
     }
@@ -28,6 +28,6 @@ class Grades(private val rawGrades: Map<String, Double>,
         val w = trueGrades.map { it.value.weighting }.sum()
 
         if (w == 0.0) return 100.0 // grades are empty or all categories of grades are empty
-        return trueGrades.map { it.value.scores.average() * it.value.weighting / w }.sum()
+        return trueGrades.map { it.value.scores.average() * it.value.weighting }.sum() / w
     }
 }

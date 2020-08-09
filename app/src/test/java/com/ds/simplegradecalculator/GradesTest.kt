@@ -21,9 +21,10 @@ class GradesTest {
         Grades(mapOf())
         Grades(mutableMapOf())
 
-        // sum of weightings = 1
+        // sum of weightings = ~100
         Grades(mapOf("tests" to 100.0))
         Grades(mapOf("tests" to 40.0, "quizzes" to 20.0, "hws" to 20.0, "labs" to 20.0))
+        Grades(mapOf("tests" to 33.3, "quizzes" to 33.3, "hws" to 33.3))
     }
 
     @Test

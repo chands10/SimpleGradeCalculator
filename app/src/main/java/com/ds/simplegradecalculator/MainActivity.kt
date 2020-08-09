@@ -7,6 +7,7 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -84,7 +85,11 @@ class MainActivity : AppCompatActivity() {
             if (getItemViewType(position) == R.layout.list_item) {
                 val item = CategoryContent.ITEMS[position]
                 holder.mCategoryLabel!!.setText(item.category)
+                holder.mCategoryLabel.imeOptions = EditorInfo.IME_ACTION_NEXT
+
                 holder.mWeightLabel!!.setText(item.weight)
+                holder.mWeightLabel.imeOptions =
+                    if (position == itemCount - 2) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
             }
         }
 
