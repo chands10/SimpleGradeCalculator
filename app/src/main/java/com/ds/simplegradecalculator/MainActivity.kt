@@ -35,17 +35,20 @@ class MainActivity : AppCompatActivity() {
     // TODO: Pass Grades g into next activity
     fun createGrades(view: View) {
         val rawGrades = mutableMapOf<String, Double>()
+        val categories = mutableSetOf<String>() // used for error checking when field already exists
+        // may contain more categories than rawGrades since pair will not be added to rawGrades if weight is empty
         var success = true
         for (i in 0 until CategoryContent.size) {
             val current = categories_list.getChildAt(i)
             val category = current.findViewById<EditText>(R.id.editTextCategory)
             val weight = current.findViewById<EditText>(R.id.editTextWeight)
-            if (checkGrade(category, weight, rawGrades, i) && success) { // find all errors, even if success is false
+            if (checkGrade(category, weight, categories, i) && success) { // find all errors, even if success is false
                 rawGrades[category.text.toString()] = weight.text.toString().toDouble()
             } else if (success) {
                 rawGrades.clear()
                 success = false
             }
+            if (category.text.toString().isNotBlank()) categories.add(category.text.toString())
         }
 
         if (success) {
@@ -59,25 +62,24 @@ class MainActivity : AppCompatActivity() {
 
     // Ensure the text fields are not empty or duplicates
     // return true if all of them are not, else error and return false
-    private fun checkGrade(category: EditText, weight: EditText, rawGrades: Map<String, Double>, i: Int): Boolean {
-        var r = true
+    private fun checkGrade(category: EditText, weight: EditText, categories: Set<String>, i: Int): Boolean {
+        var c = true
+        var w = true
         if (category.text.toString().isBlank()) {
             category.error = getString(R.string.field_blank)
-            r = false
+            c = false
         }
-        if (category.text.toString() in rawGrades) {
+        if (category.text.toString() in categories) {
             category.error = getString(R.string.field_exists)
-            r = false
+            c = false
         }
         if (weight.text.toString().isBlank()) {
             weight.error = getString(R.string.field_blank)
-            r = false
+            w = false
         }
-        if (!r) {
-            CategoryContent.ITEMS[i].categoryError = category.error?.toString()
-            CategoryContent.ITEMS[i].weightError = weight.error?.toString()
-        }
-        return r
+        if (!c) CategoryContent.ITEMS[i].categoryError = category.error?.toString()
+        if (!w) CategoryContent.ITEMS[i].weightError = weight.error?.toString()
+        return c && w
     }
 
     // Adapter for categories_list
@@ -117,23 +119,29 @@ class MainActivity : AppCompatActivity() {
                 mCategoryLabel?.addTextChangedListener(object: TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        CategoryContent.ITEMS[adapterPosition].category = mCategoryLabel.text.toString()
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
+                        val item = CategoryContent.ITEMS[adapterPosition]
+                        item.category = mCategoryLabel.text.toString()
+                        // only change error when actual changes occur to text (error remains when device orientation changes)
+                        if (count > 0) item.categoryError = mCategoryLabel.error?.toString()
                     }
                 })
 
                 mWeightLabel?.addTextChangedListener(object: TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
-                        CategoryContent.ITEMS[adapterPosition].weight = mWeightLabel.text.toString()
+                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
+                        val item = CategoryContent.ITEMS[adapterPosition]
+                        item.weight = mWeightLabel.text.toString()
+                        // only change error when actual changes occur to text (error remains when device orientation changes)
+                        if (count > 0) item.weightError = mWeightLabel.error?.toString()
                     }
                 })
             }
         }
     }
 
-    // list that holds each row's category and weight
+    // list that holds each row's category, weight, and corresponding errors
     object CategoryContent {
         val ITEMS = mutableListOf<CategoryItem>()
         val size get() = ITEMS.size
