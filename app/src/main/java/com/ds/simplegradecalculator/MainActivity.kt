@@ -63,23 +63,25 @@ class MainActivity : AppCompatActivity() {
     // Ensure the text fields are not empty or duplicates
     // return true if all of them are not, else error and return false
     private fun checkGrade(category: EditText, weight: EditText, categories: Set<String>, i: Int): Boolean {
-        var c = true
-        var w = true
+        var r = true
         if (category.text.toString().isBlank()) {
-            category.error = getString(R.string.field_blank)
-            c = false
-        }
-        if (category.text.toString() in categories) {
-            category.error = getString(R.string.field_exists)
-            c = false
+            val error = getString(R.string.field_blank)
+            category.error = error
+            CategoryContent.ITEMS[i].categoryError = error
+            r = false
+        } else if (category.text.toString() in categories) {
+            val error = getString(R.string.field_exists)
+            category.error = error
+            CategoryContent.ITEMS[i].categoryError = error
+            r = false
         }
         if (weight.text.toString().isBlank()) {
-            weight.error = getString(R.string.field_blank)
-            w = false
+            val error = getString(R.string.field_blank)
+            weight.error = error
+            CategoryContent.ITEMS[i].weightError = error
+            r = false
         }
-        if (!c) CategoryContent.ITEMS[i].categoryError = category.error?.toString()
-        if (!w) CategoryContent.ITEMS[i].weightError = weight.error?.toString()
-        return c && w
+        return r
     }
 
     // Adapter for categories_list
@@ -95,14 +97,18 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: CategoryAdapter.ViewHolder, position: Int) {
             if (getItemViewType(position) == R.layout.list_item) {
                 val item = CategoryContent.ITEMS[position]
-                holder.mCategoryLabel!!.setText(item.category)
-                holder.mCategoryLabel.error = item.categoryError
-                holder.mCategoryLabel.imeOptions = EditorInfo.IME_ACTION_NEXT
+                holder.mCategoryLabel!!.apply {
+                    setText(item.category)
+                    error = item.categoryError
+                    imeOptions = EditorInfo.IME_ACTION_NEXT
+                }
 
-                holder.mWeightLabel!!.setText(item.weight)
-                holder.mWeightLabel.error = item.weightError
-                holder.mWeightLabel.imeOptions =
-                    if (position == itemCount - 2) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
+                holder.mWeightLabel!!.apply {
+                    setText(item.weight)
+                    error = item.weightError
+                    imeOptions =
+                        if (position == itemCount - 2) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
+                }
             }
         }
 
