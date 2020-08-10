@@ -28,27 +28,27 @@ class MainActivity : AppCompatActivity() {
     // TODO: Set focus on last EditText
     fun addCategory(view: View) {
         CategoryContent.addItem()
-        categories_list.adapter?.notifyDataSetChanged()
+        categories_list.adapter?.notifyItemInserted(CategoryContent.size - 1)
     }
 
     // Continue button: Verifies scores, creates Grades class, and continues onto the next page
     // TODO: Pass Grades g into next activity
-    // TODO: Update implementation to exclusively use CategoryContent
     fun createGrades(view: View) {
         val rawGrades = mutableMapOf<String, Double>()
-        for (i in 0 until CategoryContent.size()) {
+        var success = true
+        for (i in 0 until CategoryContent.size) {
             val current = categories_list.getChildAt(i)
             val category = current.findViewById<EditText>(R.id.editTextCategory)
             val weight = current.findViewById<EditText>(R.id.editTextWeight)
-            if (checkGrade(category, weight, rawGrades)) {
+            if (checkGrade(category, weight, rawGrades, i) && success) { // find all errors, even if success is false
                 rawGrades[category.text.toString()] = weight.text.toString().toDouble()
-            } else {
+            } else if (success) {
                 rawGrades.clear()
-                break
+                success = false
             }
         }
 
-        if (rawGrades.isNotEmpty()) { // guaranteed to be non-empty if successful
+        if (success) {
             try { // will error if the total is not ~100
                 val g = Grades(rawGrades, getString(R.string.weightingError))
             } catch (e: RuntimeException) {
@@ -59,18 +59,23 @@ class MainActivity : AppCompatActivity() {
 
     // Ensure the text fields are not empty or duplicates
     // return true if all of them are not, else error and return false
-    private fun checkGrade(category: EditText, weight: EditText, rawGrades: Map<String, Double>): Boolean {
+    // TODO: Fix error disappearance
+    private fun checkGrade(category: EditText, weight: EditText, rawGrades: Map<String, Double>, i: Int): Boolean {
+        var r = true
         if (category.text.toString().isBlank()) {
             category.error = getString(R.string.field_blank)
-            return false
-        } else if (category.text.toString() in rawGrades) {
-            category.error = getString(R.string.field_exists)
-            return false
-        } else if (weight.text.toString().isBlank()) {
-            weight.error = getString(R.string.field_blank)
-            return false
+            r = false
         }
-        return true
+        if (category.text.toString() in rawGrades) {
+            category.error = getString(R.string.field_exists)
+            r = false
+        }
+        if (weight.text.toString().isBlank()) {
+            weight.error = getString(R.string.field_blank)
+            r = false
+        }
+        if (!r) categories_list.adapter?.notifyItemChanged(i)
+        return r
     }
 
     // Adapter for categories_list
@@ -95,12 +100,11 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        override fun getItemCount() = CategoryContent.size() + 1 // add 1 to account for button
+        override fun getItemCount() = CategoryContent.size + 1 // add 1 to account for button
 
         override fun getItemViewType(position: Int) =
             if (position == itemCount - 1) R.layout.add_another_button else R.layout.list_item
 
-        // TODO: Move EditText errors here
         inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
             val mCategoryLabel: EditText? = view.findViewById<EditText>(R.id.editTextCategory)
             val mWeightLabel: EditText? = view.findViewById<EditText>(R.id.editTextWeight)
@@ -111,6 +115,7 @@ class MainActivity : AppCompatActivity() {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         CategoryContent.ITEMS[adapterPosition].category = mCategoryLabel.text.toString()
+                        CategoryContent.ITEMS[adapterPosition].categoryError = mCategoryLabel.error?.toString()
                     }
                 })
 
@@ -119,6 +124,7 @@ class MainActivity : AppCompatActivity() {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         CategoryContent.ITEMS[adapterPosition].weight = mWeightLabel.text.toString()
+                        CategoryContent.ITEMS[adapterPosition].weightError = mWeightLabel.error?.toString()
                     }
                 })
             }
@@ -128,16 +134,16 @@ class MainActivity : AppCompatActivity() {
     // list that holds each row's category and weight
     object CategoryContent {
         val ITEMS = mutableListOf<CategoryItem>()
+        val size get() = ITEMS.size
+
         init {
             addItem()
         }
 
         fun addItem() {
-            ITEMS.add(CategoryItem("", ""))
+            ITEMS.add(CategoryItem("", "", null, null))
         }
 
-        fun size() = ITEMS.size
-
-        data class CategoryItem(var category: String, var weight: String)
+        data class CategoryItem(var category: String, var weight: String, var categoryError: String?, var weightError: String?)
     }
 }
