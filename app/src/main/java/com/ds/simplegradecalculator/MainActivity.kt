@@ -74,7 +74,10 @@ class MainActivity : AppCompatActivity() {
             weight.error = getString(R.string.field_blank)
             r = false
         }
-        if (!r) categories_list.adapter?.notifyItemChanged(i)
+        if (!r) {
+            CategoryContent.ITEMS[i].categoryError = category.error?.toString()
+            CategoryContent.ITEMS[i].weightError = weight.error?.toString()
+        }
         return r
     }
 
@@ -115,7 +118,6 @@ class MainActivity : AppCompatActivity() {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         CategoryContent.ITEMS[adapterPosition].category = mCategoryLabel.text.toString()
-                        CategoryContent.ITEMS[adapterPosition].categoryError = mCategoryLabel.error?.toString()
                     }
                 })
 
@@ -124,7 +126,6 @@ class MainActivity : AppCompatActivity() {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         CategoryContent.ITEMS[adapterPosition].weight = mWeightLabel.text.toString()
-                        CategoryContent.ITEMS[adapterPosition].weightError = mWeightLabel.error?.toString()
                     }
                 })
             }
