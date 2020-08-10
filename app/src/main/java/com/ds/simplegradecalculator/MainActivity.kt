@@ -59,7 +59,6 @@ class MainActivity : AppCompatActivity() {
 
     // Ensure the text fields are not empty or duplicates
     // return true if all of them are not, else error and return false
-    // TODO: Fix error disappearance
     private fun checkGrade(category: EditText, weight: EditText, rawGrades: Map<String, Double>, i: Int): Boolean {
         var r = true
         if (category.text.toString().isBlank()) {
@@ -95,9 +94,11 @@ class MainActivity : AppCompatActivity() {
             if (getItemViewType(position) == R.layout.list_item) {
                 val item = CategoryContent.ITEMS[position]
                 holder.mCategoryLabel!!.setText(item.category)
+                holder.mCategoryLabel.error = item.categoryError
                 holder.mCategoryLabel.imeOptions = EditorInfo.IME_ACTION_NEXT
 
                 holder.mWeightLabel!!.setText(item.weight)
+                holder.mWeightLabel.error = item.weightError
                 holder.mWeightLabel.imeOptions =
                     if (position == itemCount - 2) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
             }
