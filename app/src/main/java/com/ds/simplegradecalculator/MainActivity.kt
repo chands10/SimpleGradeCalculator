@@ -67,6 +67,7 @@ class MainActivity : AppCompatActivity() {
     // return true if all of them are not, else error and return false
     private fun checkGrade(category: String, weight: String, categories: Set<String>, i: Int): Boolean {
         var r = true
+        var existsText = false
         if (category.isBlank()) {
             CategoryContent.ITEMS[i].categoryError = getString(R.string.field_blank)
             r = false
@@ -74,14 +75,16 @@ class MainActivity : AppCompatActivity() {
             CategoryContent.ITEMS[i].categoryError = getString(R.string.field_exists)
             CategoryContent.ITEMS[i].existsText = category
             r = false
-        } else { // remove any exist errors if they were present prior
+        } else if (CategoryContent.ITEMS[i].existsText != null) { // remove any exist errors if they were present prior
+            // ex: two same categories, user changes top category. Now set bottom category existsText to null
             CategoryContent.ITEMS[i].existsText = null
+            existsText = true
         }
         if (weight.isBlank()) {
             CategoryContent.ITEMS[i].weightError = getString(R.string.field_blank)
             r = false
         }
-        if (!r) categories_list.adapter?.notifyItemChanged(i)
+        if (!r || existsText) categories_list.adapter?.notifyItemChanged(i)
         return r
     }
 
