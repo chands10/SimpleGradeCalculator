@@ -75,7 +75,11 @@ class MainActivity : AppCompatActivity() {
             val error = getString(R.string.field_exists)
             category.error = error
             CategoryContent.ITEMS[i].categoryError = error
+            CategoryContent.ITEMS[i].existsText = category.text.toString()
             r = false
+        } else { // remove any exist errors if they were present prior
+            category.error = null
+            CategoryContent.ITEMS[i].existsText = null
         }
         if (weight.text.toString().isBlank()) {
             val error = getString(R.string.field_blank)
@@ -131,8 +135,8 @@ class MainActivity : AppCompatActivity() {
                         val item = CategoryContent.ITEMS[adapterPosition]
                         item.category = mCategoryLabel.text.toString()
                         // only change error when actual changes occur to text (error remains when device orientation changes)
-                        // TODO: Fix error where exists error gets unset on device orientation change
-                        if (count > 0) item.categoryError = mCategoryLabel.error?.toString()
+                        if (item.existsText != null && item.existsText != item.category) item.existsText = null
+                        if (count > 0 && item.existsText == null) item.categoryError = mCategoryLabel.error?.toString()
                     }
                 })
 
@@ -163,6 +167,12 @@ class MainActivity : AppCompatActivity() {
             ITEMS.add(CategoryItem("", "", null, null))
         }
 
-        data class CategoryItem(var category: String, var weight: String, var categoryError: String?, var weightError: String?)
+        data class CategoryItem(
+            var category: String,
+            var weight: String,
+            var categoryError: String?,
+            var weightError: String?,
+            var existsText: String? = null // helper for showing exists error
+        )
     }
 }
