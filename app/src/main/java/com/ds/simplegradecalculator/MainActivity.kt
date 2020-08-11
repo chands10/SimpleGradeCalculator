@@ -27,9 +27,11 @@ class MainActivity : AppCompatActivity() {
     // Add Another button: adds another field to input text
     fun addCategory(view: View) {
         CategoryContent.addItem()
-        categories_list.adapter?.notifyItemInserted(CategoryContent.size - 1)
-        categories_list.adapter?.notifyItemChanged(CategoryContent.size - 2) // Change keyboard button from Done to Next
-        categories_list.scrollToPosition(CategoryContent.size)
+        categories_list.apply {
+            adapter?.notifyItemInserted(CategoryContent.size - 1)
+            adapter?.notifyItemChanged(CategoryContent.size - 2) // Change keyboard button from Done to Next
+            scrollToPosition(CategoryContent.size) // button
+        }
     }
 
     // Continue button: Verifies scores, creates Grades class, and continues onto the next page
@@ -134,7 +136,7 @@ class MainActivity : AppCompatActivity() {
                         val item = CategoryContent.ITEMS[adapterPosition]
                         item.category = mCategoryLabel.text.toString()
                         // only change error when actual changes occur to text (error remains when device orientation changes)
-                        if (item.existsText != null && item.existsText != item.category) item.existsText = null
+                        if (item.existsText != item.category) item.existsText = null
                         if (count > 0 && item.existsText == null) item.categoryError = mCategoryLabel.error?.toString()
                     }
                 })
@@ -163,14 +165,14 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun addItem() {
-            ITEMS.add(CategoryItem("", "", null, null))
+            ITEMS.add(CategoryItem())
         }
 
         data class CategoryItem(
-            var category: String,
-            var weight: String,
-            var categoryError: String?,
-            var weightError: String?,
+            var category: String = "",
+            var weight: String = "",
+            var categoryError: String? = null,
+            var weightError: String? = null,
             var existsText: String? = null // helper for showing exists error
         )
     }
