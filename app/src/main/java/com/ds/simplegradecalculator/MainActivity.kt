@@ -42,16 +42,16 @@ class MainActivity : AppCompatActivity() {
         // may contain more categories than rawGrades since pair will not be added to rawGrades if weight is empty
         var success = true
         for (i in 0 until CategoryContent.size) {
-            val current = categories_list.getChildAt(i)
-            val category = current.findViewById<EditText>(R.id.editTextCategory)
-            val weight = current.findViewById<EditText>(R.id.editTextWeight)
+            val current = CategoryContent.ITEMS[i]
+            val category = current.category
+            val weight = current.weight
             if (checkGrade(category, weight, categories, i) && success) { // find all errors, even if success is false
-                rawGrades[category.text.toString()] = weight.text.toString().toDouble()
+                rawGrades[category] = weight.toDouble()
             } else if (success) {
                 rawGrades.clear()
                 success = false
             }
-            if (category.text.toString().isNotBlank()) categories.add(category.text.toString())
+            if (category.isNotBlank()) categories.add(category)
         }
 
         if (success) {
@@ -65,29 +65,23 @@ class MainActivity : AppCompatActivity() {
 
     // Ensure the text fields are not empty or duplicates
     // return true if all of them are not, else error and return false
-    private fun checkGrade(category: EditText, weight: EditText, categories: Set<String>, i: Int): Boolean {
+    private fun checkGrade(category: String, weight: String, categories: Set<String>, i: Int): Boolean {
         var r = true
-        if (category.text.toString().isBlank()) {
-            val error = getString(R.string.field_blank)
-            category.error = error
-            CategoryContent.ITEMS[i].categoryError = error
+        if (category.isBlank()) {
+            CategoryContent.ITEMS[i].categoryError = getString(R.string.field_blank)
             r = false
-        } else if (category.text.toString() in categories) {
-            val error = getString(R.string.field_exists)
-            category.error = error
-            CategoryContent.ITEMS[i].categoryError = error
-            CategoryContent.ITEMS[i].existsText = category.text.toString()
+        } else if (category in categories) {
+            CategoryContent.ITEMS[i].categoryError = getString(R.string.field_exists)
+            CategoryContent.ITEMS[i].existsText = category
             r = false
         } else { // remove any exist errors if they were present prior
-            category.error = null
             CategoryContent.ITEMS[i].existsText = null
         }
-        if (weight.text.toString().isBlank()) {
-            val error = getString(R.string.field_blank)
-            weight.error = error
-            CategoryContent.ITEMS[i].weightError = error
+        if (weight.isBlank()) {
+            CategoryContent.ITEMS[i].weightError = getString(R.string.field_blank)
             r = false
         }
+        if (!r) categories_list.adapter?.notifyItemChanged(i)
         return r
     }
 
