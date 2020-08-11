@@ -29,6 +29,7 @@ class MainActivity : AppCompatActivity() {
     fun addCategory(view: View) {
         CategoryContent.addItem()
         categories_list.adapter?.notifyItemInserted(CategoryContent.size - 1)
+        categories_list.adapter?.notifyItemChanged(CategoryContent.size - 2) // Change keyboard button from Done to Next
     }
 
     // Continue button: Verifies scores, creates Grades class, and continues onto the next page
@@ -62,6 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     // Ensure the text fields are not empty or duplicates
     // return true if all of them are not, else error and return false
+    // TODO: Convert to using CategoryContent only
     private fun checkGrade(category: EditText, weight: EditText, categories: Set<String>, i: Int): Boolean {
         var r = true
         if (category.text.toString().isBlank()) {
@@ -129,6 +131,7 @@ class MainActivity : AppCompatActivity() {
                         val item = CategoryContent.ITEMS[adapterPosition]
                         item.category = mCategoryLabel.text.toString()
                         // only change error when actual changes occur to text (error remains when device orientation changes)
+                        // TODO: Fix error where exists error gets unset on device orientation change
                         if (count > 0) item.categoryError = mCategoryLabel.error?.toString()
                     }
                 })
