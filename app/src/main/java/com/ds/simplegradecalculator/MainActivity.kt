@@ -25,11 +25,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Add Another button: adds another field to input text
-    // TODO: Set focus on last EditText
     fun addCategory(view: View) {
         CategoryContent.addItem()
         categories_list.adapter?.notifyItemInserted(CategoryContent.size - 1)
         categories_list.adapter?.notifyItemChanged(CategoryContent.size - 2) // Change keyboard button from Done to Next
+        categories_list.scrollToPosition(CategoryContent.size)
     }
 
     // Continue button: Verifies scores, creates Grades class, and continues onto the next page
@@ -63,7 +63,6 @@ class MainActivity : AppCompatActivity() {
 
     // Ensure the text fields are not empty or duplicates
     // return true if all of them are not, else error and return false
-    // TODO: Convert to using CategoryContent only
     private fun checkGrade(category: EditText, weight: EditText, categories: Set<String>, i: Int): Boolean {
         var r = true
         if (category.text.toString().isBlank()) {
