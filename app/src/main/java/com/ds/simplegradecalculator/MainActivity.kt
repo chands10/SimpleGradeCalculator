@@ -132,9 +132,9 @@ class MainActivity : AppCompatActivity() {
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
                         val item = CategoryContent.ITEMS[adapterPosition]
                         item.category = mCategoryLabel.text.toString()
-                        // only change error when actual changes occur to text (error remains when device orientation changes)
+                        // only reset error when actual changes occur to text (error remains when device orientation changes)
                         if (item.existsText != item.category) item.existsText = null
-                        if (count > 0 && item.existsText == null) item.categoryError = mCategoryLabel.error?.toString()
+                        if (count > 0 && item.existsText == null) item.categoryError = null
                     }
                 })
 
@@ -144,8 +144,8 @@ class MainActivity : AppCompatActivity() {
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
                         val item = CategoryContent.ITEMS[adapterPosition]
                         item.weight = mWeightLabel.text.toString()
-                        // only change error when actual changes occur to text (error remains when device orientation changes)
-                        if (count > 0) item.weightError = mWeightLabel.error?.toString()
+                        // only reset error when actual changes occur to text (error remains when device orientation changes)
+                        if (count > 0) item.weightError = null
                     }
                 })
             }
