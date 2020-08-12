@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content">
 
     <EditText
         android:id="@+id/editTextCategory"
@@ -12,12 +12,15 @@
         android:layout_marginLeft="@dimen/catLeft"
         android:layout_marginEnd="@dimen/catMiddle"
         android:layout_marginRight="@dimen/catMiddle"
-        android:layout_weight=".7"
         android:ems="10"
         android:hint="@string/category"
         android:importantForAutofill="no"
         android:inputType="textCapSentences"
-        android:singleLine="true" />
+        android:singleLine="true"
+        app:layout_constraintEnd_toStartOf="@+id/editTextWeight"
+        app:layout_constraintHorizontal_weight=".7"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
         android:id="@+id/editTextWeight"
@@ -25,11 +28,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="@dimen/catRight"
         android:layout_marginRight="@dimen/catRight"
-        android:layout_weight=".3"
         android:ems="10"
         android:hint="@string/percent"
         android:importantForAutofill="no"
         android:inputType="numberDecimal"
-        android:singleLine="true" />
+        android:singleLine="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_weight=".3"
+        app:layout_constraintStart_toEndOf="@+id/editTextCategory"
+        app:layout_constraintTop_toTopOf="parent" />
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

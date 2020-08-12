@@ -9,58 +9,60 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:text="@string/step1"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/titles"
+        app:layout_constraintBottom_toTopOf="@+id/title1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/titles"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/title1"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="5dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toTopOf="@+id/categories_list">
+        android:layout_marginStart="@dimen/catLeft"
+        android:layout_marginLeft="@dimen/catLeft"
+        android:layout_marginEnd="@dimen/catMiddle"
+        android:layout_marginRight="@dimen/catMiddle"
+        android:gravity="center"
+        android:text="@string/category_name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/categories_list"
+        app:layout_constraintEnd_toStartOf="@+id/title2"
+        app:layout_constraintHorizontal_weight=".7"
+        app:layout_constraintStart_toStartOf="parent" />
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/catLeft"
-            android:layout_marginLeft="@dimen/catLeft"
-            android:layout_marginEnd="@dimen/catMiddle"
-            android:layout_marginRight="@dimen/catMiddle"
-            android:layout_weight=".7"
-            android:gravity="center"
-            android:text="@string/category_name"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="?android:attr/textColorPrimary" />
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="@dimen/catRight"
-            android:layout_marginRight="@dimen/catRight"
-            android:layout_weight=".3"
-            android:gravity="center"
-            android:text="@string/percent_grade"
-            android:textAppearance="@style/TextAppearance.AppCompat.Medium"
-            android:textColor="?android:attr/textColorPrimary" />
-
-    </LinearLayout>
+    <TextView
+        android:id="@+id/title2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginEnd="@dimen/catRight"
+        android:layout_marginRight="@dimen/catRight"
+        android:gravity="center"
+        android:text="@string/percent_grade"
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="?android:attr/textColorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/categories_list"
+        app:layout_constraintHorizontal_weight=".3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/title1" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/categories_list"
-        android:layout_width="match_parent"
+        android:layout_width="0dp"
         android:layout_height="0dp"
         app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
         app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintTop_toTopOf="@id/titles"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title1"
         tools:listitem="@layout/list_item" />
 
     <Button
