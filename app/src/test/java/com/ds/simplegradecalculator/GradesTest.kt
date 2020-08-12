@@ -37,6 +37,33 @@ class GradesTest {
     }
 
     @Test
+    fun testGetScores() {
+        assertTrue(g.getScores("tests") is List<Double>) // immutable
+
+        assertNull(e.getScores("tests")) // empty grades
+        assertNull(g.getScores("labs")) // labs is not a category
+        assertEquals(listOf<Double>(), g.getScores("quizzes")) // quizzes is empty
+        assertEquals(listOf(100.0), g.getScores("tests"))
+    }
+
+    @Test
+    fun testSetScores() {
+        assertNull(e.setScores("tests", listOf(100.0))) // empty grades
+        assertNull(e.getScores("tests"))
+
+        assertNull(g.setScores("labs", listOf(100.0))) // labs is not a category
+        assertNull(g.getScores("labs"))
+
+        assertEquals(false, f.setScores("tests", listOf())) // empty list returned
+
+        assertEquals(true, g.setScores("quizzes", listOf(100.0))) // start with empty list
+        assertEquals(listOf<Double>(100.0), g.getScores("quizzes"))
+
+        assertEquals(true, g.setScores("tests", listOf(0.0, 50.0))) // initially [100.0]
+        assertEquals(listOf(0.0, 50.0), g.getScores("tests")) // 100.0 is removed
+    }
+
+    @Test
     fun testCalculateGrade() {
         assertEquals(100.0, e.calculateGrade(), 0.0) // no grades -> 100
         assertEquals(100.0, f.calculateGrade(), 0.0) // category but no grades -> 100
