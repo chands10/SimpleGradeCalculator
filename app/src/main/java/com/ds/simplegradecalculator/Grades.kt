@@ -19,7 +19,7 @@ class Grades(private val rawGrades: Map<String, Double>,
 
     // add a list of [scores] to [category]
     // return true if successful else return false if list does not change and null otherwise
-    // TODO: Might delete function and convert scores to immutable list
+    // TODO: Might delete function and convert scores to immutable list if previous button is implemented on page 2
     fun addScores(category: String, scores: List<Double>) = grades[category]?.scores?.addAll(scores)
 
     // return an immutable list of scores of a [category] to be viewed
@@ -27,6 +27,7 @@ class Grades(private val rawGrades: Map<String, Double>,
 
     // copy [scores] and set them to the grades class with key [category]
     // return null if category does not exist, false if list is empty, and true otherwise
+    // (return may be removed in future if addScores is deleted)
     fun setScores(category: String, scores: List<Double>): Boolean? {
         grades[category]?.scores?.clear()
         return addScores(category, scores)
