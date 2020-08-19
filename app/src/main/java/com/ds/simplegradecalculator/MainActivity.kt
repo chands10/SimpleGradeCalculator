@@ -131,8 +131,8 @@ class MainActivity : AppCompatActivity() {
             if (position == itemCount - 1) R.layout.add_another_button else R.layout.list_item
 
         inner class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
-            val mCategoryLabel: EditText? = view.findViewById<EditText>(R.id.editTextCategory)
-            val mWeightLabel: EditText? = view.findViewById<EditText>(R.id.editTextWeight)
+            val mCategoryLabel: EditText? = view.findViewById(R.id.editTextCategory)
+            val mWeightLabel: EditText? = view.findViewById(R.id.editTextWeight)
 
             init { // set category and weight when text changed
                 mCategoryLabel?.addTextChangedListener(object: TextWatcher {
