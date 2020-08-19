@@ -37,6 +37,26 @@ class GradesTest {
     }
 
     @Test
+    fun testCategories() {
+        val ec = e.categories
+        assertFalse(ec.hasNext())
+
+        val fc = f.categories
+        assertTrue(fc.hasNext())
+        assertEquals("tests", fc.next())
+        assertFalse(fc.hasNext())
+
+        val gc = g.categories
+        assertTrue(gc.hasNext())
+        assertEquals("projects", gc.next())
+        assertTrue(gc.hasNext())
+        assertEquals("quizzes", gc.next())
+        assertTrue(gc.hasNext())
+        assertEquals("tests", gc.next())
+        assertFalse(gc.hasNext())
+    }
+
+    @Test
     fun testGetScores() {
         assertTrue(g.getScores("tests") is List<Double>) // immutable
 

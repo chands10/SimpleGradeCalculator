@@ -57,14 +57,17 @@ class MainActivity : AppCompatActivity() {
         }
 
         if (success) {
+            var g: Grades? = null
             try { // will error if the total is not ~100
-                val g = Grades(rawGrades, getString(R.string.weightingError))
+                g = Grades(rawGrades)
+            } catch (e: RuntimeException) {
+                Toast.makeText(applicationContext, getString(R.string.weightingError), Toast.LENGTH_SHORT).show()
+            }
+            if (g != null) {
                 val intent = Intent(this, ScoresActivity::class.java).apply {
                     putExtra(GRADES, g)
                 }
                 startActivity(intent)
-            } catch (e: RuntimeException) {
-                Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
         }
     }
