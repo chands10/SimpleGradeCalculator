@@ -1,9 +1,12 @@
 package com.ds.simplegradecalculator
+
+import java.io.Serializable
+
 // [rawGrades] with category as key and weight as value and string [weightingError]
 class Grades(private val rawGrades: Map<String, Double>,
-             private val weightingError: String = "Total weighting must be equal to 100") {
+             private val weightingError: String = "Total weighting must be equal to 100"): Serializable {
     // category with percentage of grade [weighting] and test grades [scores]
-    private inner class Category(val weighting: Double) {
+    private inner class Category(val weighting: Double): Serializable {
         val scores = mutableListOf<Double>()
     }
     private val c = checkRep()

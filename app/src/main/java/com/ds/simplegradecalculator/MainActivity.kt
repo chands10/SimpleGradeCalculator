@@ -1,5 +1,6 @@
 package com.ds.simplegradecalculator
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -13,6 +14,8 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_main.*
+
+const val GRADES = "com.ds.simplegradecalculator.GRADES"
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -35,7 +38,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Continue button: Verifies scores, creates Grades class, and continues onto the next page
-    // TODO: Pass Grades g into next activity
     fun createGrades(view: View) {
         val rawGrades = mutableMapOf<String, Double>()
         val categories = mutableSetOf<String>() // used for error checking when field already exists
@@ -57,6 +59,10 @@ class MainActivity : AppCompatActivity() {
         if (success) {
             try { // will error if the total is not ~100
                 val g = Grades(rawGrades, getString(R.string.weightingError))
+                val intent = Intent(this, ScoresActivity::class.java).apply {
+                    putExtra(GRADES, g)
+                }
+                startActivity(intent)
             } catch (e: RuntimeException) {
                 Toast.makeText(applicationContext, e.message, Toast.LENGTH_SHORT).show()
             }
