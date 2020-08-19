@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Add Another button: adds another field to input text
-    fun addCategory(view: View) {
+    fun addAnother(view: View) {
         CategoryContent.addItem()
         categories_list.apply {
             adapter?.notifyItemInserted(CategoryContent.size - 1)
@@ -110,13 +110,13 @@ class MainActivity : AppCompatActivity() {
         override fun onBindViewHolder(holder: CategoryAdapter.ViewHolder, position: Int) {
             if (getItemViewType(position) == R.layout.list_item) {
                 val item = CategoryContent.ITEMS[position]
-                holder.mCategoryLabel!!.apply {
+                holder.mCategoryLabel?.apply {
                     setText(item.category)
                     error = item.categoryError
                     imeOptions = EditorInfo.IME_ACTION_NEXT
                 }
 
-                holder.mWeightLabel!!.apply {
+                holder.mWeightLabel?.apply {
                     setText(item.weight)
                     error = item.weightError
                     imeOptions =
