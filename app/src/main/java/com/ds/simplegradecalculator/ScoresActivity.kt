@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_scores.*
 
 class ScoresActivity : AppCompatActivity() {
+    var categories: ListIterator<String>? = null // categories in grades
+    var current: String? = null // current category
+    var g: Grades? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scores)
 
-        val g = intent.getSerializableExtra(GRADES) as Grades?
-        val categories = g?.categories
-        setNextCategory(categories)
+        g = intent.getSerializableExtra(GRADES) as Grades?
+        categories = g?.categories
+        setNextCategory()
 
         scores_list.apply {
             layoutManager = LinearLayoutManager(this@ScoresActivity)
@@ -29,9 +32,12 @@ class ScoresActivity : AppCompatActivity() {
     }
 
     // Set layout element currentCategory
-    private fun setNextCategory(categories: ListIterator<String>?): Boolean {
+    private fun setNextCategory(): Boolean {
         val hasNext = categories?.hasNext() == true
-        if (hasNext) currentCategory.text = categories!!.next()
+        if (hasNext) {
+            current = categories!!.next()
+            currentCategory.text = current
+        }
         return hasNext
     }
 
@@ -99,8 +105,13 @@ class ScoresActivity : AppCompatActivity() {
             addItem()
         }
 
-        fun addItem() {
+        fun addItem() { // notify change after
             ITEMS.add(ScoreItem())
+        }
+
+        fun loadData(data: List<Double>) { // notify change after
+            ITEMS.clear()
+            data.mapTo(ITEMS) { ScoreItem(it.toString()) }
         }
 
         data class ScoreItem(
