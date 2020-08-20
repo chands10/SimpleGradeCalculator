@@ -70,12 +70,21 @@ class ScoresActivity : AppCompatActivity() {
         val change = setAdjacentCategory(previous)
         when {
             change -> { // repopulate data
-
                 val scores = g?.getScores(categories?.get(c))
-                if (scores?.isNotEmpty() == true) ScoreContent.loadData(scores)
-                else ScoreContent.reset()
 
-                scores_list.adapter?.notifyDataSetChanged() // TODO: look at making more specific
+                // clear data
+                val s = ScoreContent.size
+                ScoreContent.ITEMS.clear()
+                scores_list.adapter?.notifyItemRangeRemoved(0, s)
+
+                if (scores?.isNotEmpty() == true) {
+                    scores.mapTo(ScoreContent.ITEMS) { ScoreContent.ScoreItem(it.toString()) }
+                    scores_list.adapter?.notifyItemRangeInserted(0, ScoreContent.size)
+                }
+                else {
+                    ScoreContent.addItem()
+                    scores_list.adapter?.notifyItemInserted(0)
+                }
             }
             previous -> { // go back to previous activity
                 // TODO: Consider passing Grades g back
@@ -110,7 +119,7 @@ class ScoresActivity : AppCompatActivity() {
                 val item = ScoreContent.ITEMS[position]
                 holder.mScoreLabel?.apply {
                     setText(item.score)
-                    error = item.scoreError
+//                    error = item.scoreError
                     imeOptions =
                         if (position == itemCount - 2) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
                 }
@@ -133,7 +142,7 @@ class ScoresActivity : AppCompatActivity() {
                         val item = ScoreContent.ITEMS[adapterPosition]
                         item.score = mScoreLabel.text.toString()
                         // only reset error when actual changes occur to text (error remains when device orientation changes)
-                        if (count > 0) item.scoreError = null
+//                        if (count > 0) item.scoreError = null
                     }
                 })
             }
@@ -149,23 +158,13 @@ class ScoresActivity : AppCompatActivity() {
             addItem()
         }
 
-        fun reset() { // notify change after
-            ITEMS.clear()
-            addItem()
-        }
-
         fun addItem() { // notify change after
             ITEMS.add(ScoreItem())
         }
 
-        fun loadData(data: List<Double>?) { // notify change after
-            ITEMS.clear()
-            data?.mapTo(ITEMS) { ScoreItem(it.toString()) }
-        }
-
         data class ScoreItem(
-            var score: String = "",
-            var scoreError: String? = null
+            var score: String = ""
+//            var scoreError: String? = null
         )
     }
 }
