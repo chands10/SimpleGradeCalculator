@@ -33,6 +33,7 @@ class GradesTest {
         assertNull(f.addScores("quizzes", listOf(99.0))) // quizzes is not a category
         assertEquals(false, f.addScores("tests", listOf())) // list does not change
         assertEquals(true, f.addScores("tests", listOf(99.1, 100.0)))
+        assertNull(g.addScores(null, listOf(99.1)))
         assertEquals(true, g.addScores("tests", listOf(0.0)))
     }
 
@@ -62,6 +63,7 @@ class GradesTest {
 
         assertNull(e.getScores("tests")) // empty grades
         assertNull(g.getScores("labs")) // labs is not a category
+        assertNull(g.getScores(null))
         assertEquals(listOf<Double>(), g.getScores("quizzes")) // quizzes is empty
         assertEquals(listOf(100.0), g.getScores("tests"))
     }
@@ -72,6 +74,9 @@ class GradesTest {
         assertNull(e.getScores("tests"))
 
         assertNull(g.setScores("labs", listOf(100.0))) // labs is not a category
+        assertNull(g.getScores("labs"))
+
+        assertNull(g.setScores(null, listOf(100.0)))
         assertNull(g.getScores("labs"))
 
         assertEquals(false, f.setScores("tests", listOf())) // empty list returned

@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         categories_list.apply {
             layoutManager = LinearLayoutManager(this@MainActivity)
-            adapter = CategoryAdapter()
+            adapter = CategoryAdapter(getString(R.string.field_exists))
         }
     }
 
@@ -77,17 +77,20 @@ class MainActivity : AppCompatActivity() {
     private fun checkGrade(category: String, weight: String, categories: Set<String>, i: Int): Boolean {
         var r = true
         var existsText = false
-        if (category.isBlank()) {
-            CategoryContent.ITEMS[i].categoryError = getString(R.string.field_blank)
-            r = false
-        } else if (category in categories) {
-            CategoryContent.ITEMS[i].categoryError = getString(R.string.field_exists)
-            CategoryContent.ITEMS[i].existsText = category
-            r = false
-        } else if (CategoryContent.ITEMS[i].existsText != null) { // remove any exist errors if they were present prior
-            // ex: two same categories, user changes top category. Now set bottom category existsText to null
-            CategoryContent.ITEMS[i].existsText = null
-            existsText = true
+        when {
+            category.isBlank() -> {
+                CategoryContent.ITEMS[i].categoryError = getString(R.string.field_blank)
+                r = false
+            }
+            category in categories -> {
+                CategoryContent.ITEMS[i].categoryError = getString(R.string.field_exists)
+                r = false
+            }
+            CategoryContent.ITEMS[i].categoryError == getString(R.string.field_exists) -> { // remove any exist errors if they were present prior
+                // ex: two same categories, user changes top category. Now set bottom categoryError to null
+                CategoryContent.ITEMS[i].categoryError = null
+                existsText = true
+            }
         }
         if (weight.isBlank()) {
             CategoryContent.ITEMS[i].weightError = getString(R.string.field_blank)
@@ -98,7 +101,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     // Adapter for categories_list
-    private class CategoryAdapter: RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
+    private class CategoryAdapter(val fieldExistsError: String): RecyclerView.Adapter<CategoryAdapter.ViewHolder>() {
         override fun onCreateViewHolder(
             parent: ViewGroup,
             viewType: Int
@@ -140,10 +143,12 @@ class MainActivity : AppCompatActivity() {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
                         val item = CategoryContent.ITEMS[adapterPosition]
-                        item.category = mCategoryLabel.text.toString()
                         // only reset error when actual changes occur to text (error remains when device orientation changes)
-                        if (item.existsText != item.category) item.existsText = null
-                        if (count > 0 && item.existsText == null) item.categoryError = null
+                        val input = mCategoryLabel.text.toString()
+                        if (item.categoryError == fieldExistsError && input != item.category) item.categoryError = null
+                        if (count > 0 && item.categoryError != fieldExistsError) item.categoryError = null
+
+                        item.category = input
                     }
                 })
 
@@ -152,9 +157,10 @@ class MainActivity : AppCompatActivity() {
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
                         val item = CategoryContent.ITEMS[adapterPosition]
-                        item.weight = mWeightLabel.text.toString()
                         // only reset error when actual changes occur to text (error remains when device orientation changes)
                         if (count > 0) item.weightError = null
+
+                        item.weight = mWeightLabel.text.toString()
                     }
                 })
             }
@@ -178,8 +184,7 @@ class MainActivity : AppCompatActivity() {
             var category: String = "",
             var weight: String = "",
             var categoryError: String? = null,
-            var weightError: String? = null,
-            var existsText: String? = null // helper for showing exists error
+            var weightError: String? = null
         )
     }
 }
