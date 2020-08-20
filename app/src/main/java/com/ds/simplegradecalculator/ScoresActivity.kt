@@ -63,14 +63,13 @@ class ScoresActivity : AppCompatActivity() {
     // Save current data in grades, set current to the adjacent category if available,
     // and repopulate ScoreContent
     private fun makeChange(previous: Boolean = false) {
-        val prevCategory = categories?.get(c)
+        // save previous scores
+        saveScores(categories?.get(c))
 
         // update current if relevant
         val change = setAdjacentCategory(previous)
         when {
             change -> { // repopulate data
-                // save previous scores
-                saveScores(prevCategory)
 
                 val scores = g?.getScores(categories?.get(c))
                 if (scores?.isNotEmpty() == true) ScoreContent.loadData(scores)
