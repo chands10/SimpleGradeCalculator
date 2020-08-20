@@ -1,5 +1,6 @@
 package com.ds.simplegradecalculator
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
@@ -36,6 +37,7 @@ class ScoresActivity : AppCompatActivity() {
     private fun setAdjacentCategory(previous: Boolean = false): Boolean {
         val hasAdjacent = (if (previous) categories?.hasPrevious() else categories?.hasNext()) == true
         if (hasAdjacent) {
+//            Toast.makeText(applicationContext, (if (previous) categories!!.previousIndex() else categories!!.nextIndex()).toString(), Toast.LENGTH_SHORT).show()
             current = if (previous) categories!!.previous() else categories!!.next()
             currentCategory.text = current
         }
@@ -54,34 +56,46 @@ class ScoresActivity : AppCompatActivity() {
 
     // TODO: Evaluate if error checking is needed
     // save the scores of the current category inside Grades g
-    private fun saveScores() = g?.setScores(current, ScoreContent.ITEMS
+    private fun saveScores(category: String?) = g?.setScores(category, ScoreContent.ITEMS
         .filter { it.score.toDoubleOrNull() != null }
         .map { it.score.toDouble() })
 
-    // TODO: Implement
-    // Save current data in grades, set current to the previous category if available,
-    // and repopulate ScoreContent. If at beginning of categories then move back to MainActivity
-    fun prev(view: View) {}
-
-    // Save current data in grades, set current to the next category if available,
-    // and repopulate ScoreContent. If at end of categories then switch activities
-    fun next(view: View) {
-        // save current scores
-        saveScores()
+    // TODO: Tie back button to function
+    // Save current data in grades, set current to the adjacent category if available,
+    // and repopulate ScoreContent
+    private fun makeChange(previous: Boolean = false) {
+        val prevCategory = current
 
         // update current if relevant
-        val change = setAdjacentCategory()
-        if (change) { // repopulate data
-            val scores = g?.getScores(current)
-            if (scores?.isNotEmpty() == true) ScoreContent.loadData(scores)
-            else ScoreContent.reset()
+        val change = setAdjacentCategory(previous)
+        when {
+            change -> { // repopulate data
+                // save previous scores
+                saveScores(prevCategory)
 
-            scores_list.adapter?.notifyDataSetChanged() // TODO: look at making more specific
-        } else { // prepare for calculation
-            // TODO: else switch activities
-            Toast.makeText(applicationContext, g?.calculateGrade().toString(), Toast.LENGTH_SHORT).show()
+                val scores = g?.getScores(current)
+                if (scores?.isNotEmpty() == true) ScoreContent.loadData(scores)
+                else ScoreContent.reset()
+
+                scores_list.adapter?.notifyDataSetChanged() // TODO: look at making more specific
+            }
+            previous -> { // go back to previous activity
+                // TODO: Consider passing Grades g back
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
+            }
+            else -> { // prepare for calculation
+                // TODO: else switch activities
+                Toast.makeText(applicationContext, g?.calculateGrade().toString(), Toast.LENGTH_SHORT).show()
+            }
         }
     }
+
+    // call makeChange(). If at beginning of categories then go to previous activity
+    fun prev(view: View) = makeChange(true)
+
+    // Call makeChange(). If at end of categories then switch activities
+    fun next(view: View) = makeChange()
 
     // Adapter for scores_list
     private class ScoreAdapter: RecyclerView.Adapter<ScoreAdapter.ViewHolder>() {
