@@ -40,21 +40,13 @@ class GradesTest {
     @Test
     fun testCategories() {
         val ec = e.categories
-        assertFalse(ec.hasNext())
+        assertTrue(ec.isEmpty())
 
         val fc = f.categories
-        assertTrue(fc.hasNext())
-        assertEquals("tests", fc.next())
-        assertFalse(fc.hasNext())
+        assertEquals(listOf("tests"), fc)
 
         val gc = g.categories
-        assertTrue(gc.hasNext())
-        assertEquals("projects", gc.next())
-        assertTrue(gc.hasNext())
-        assertEquals("quizzes", gc.next())
-        assertTrue(gc.hasNext())
-        assertEquals("tests", gc.next())
-        assertFalse(gc.hasNext())
+        assertEquals(listOf("projects", "quizzes", "tests"), gc)
     }
 
     @Test

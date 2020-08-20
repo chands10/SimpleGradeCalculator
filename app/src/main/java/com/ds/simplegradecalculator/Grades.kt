@@ -5,7 +5,7 @@ import java.io.Serializable
 // [rawGrades] with category as key and weight as value and string [weightingError]
 class Grades(private val rawGrades: Map<String, Double>): Serializable {
     // category with percentage of grade [weighting] and test grades [scores]
-    private inner class Category(val weighting: Double): Serializable {
+    private class Category(val weighting: Double): Serializable {
         val scores = mutableListOf<Double>()
     }
     init {
@@ -14,9 +14,8 @@ class Grades(private val rawGrades: Map<String, Double>): Serializable {
 
     private val grades = rawGrades.mapValues { Category(it.value) }
 
-    // convert to property so class is serializable
     // should only be called once
-    val categories get() = grades.keys.sorted().listIterator()
+    val categories get() = grades.keys.sorted()
 
     @Throws(RuntimeException::class)
     private fun checkRep() {

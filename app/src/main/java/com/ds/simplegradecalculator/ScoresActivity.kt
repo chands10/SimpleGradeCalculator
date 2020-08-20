@@ -16,8 +16,8 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_scores.*
 
 class ScoresActivity : AppCompatActivity() {
-    var categories: ListIterator<String>? = null // categories in grades
-    var current: String? = null // current category
+    var categories: List<String>? = null // categories in grades
+    var c = -1 // current category index
     var g: Grades? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,11 +35,10 @@ class ScoresActivity : AppCompatActivity() {
 
     // Set layout element currentCategory
     private fun setAdjacentCategory(previous: Boolean = false): Boolean {
-        val hasAdjacent = (if (previous) categories?.hasPrevious() else categories?.hasNext()) == true
+        val hasAdjacent = if (previous) c > 0 && c < categories?.size ?: 0 else c < categories?.lastIndex ?: -1
         if (hasAdjacent) {
-//            Toast.makeText(applicationContext, (if (previous) categories!!.previousIndex() else categories!!.nextIndex()).toString(), Toast.LENGTH_SHORT).show()
-            current = if (previous) categories!!.previous() else categories!!.next()
-            currentCategory.text = current
+            c = if (previous) c - 1 else c + 1
+            currentCategory.text = categories!![c]
         }
         return hasAdjacent
     }
@@ -64,7 +63,7 @@ class ScoresActivity : AppCompatActivity() {
     // Save current data in grades, set current to the adjacent category if available,
     // and repopulate ScoreContent
     private fun makeChange(previous: Boolean = false) {
-        val prevCategory = current
+        val prevCategory = categories?.get(c)
 
         // update current if relevant
         val change = setAdjacentCategory(previous)
@@ -73,7 +72,7 @@ class ScoresActivity : AppCompatActivity() {
                 // save previous scores
                 saveScores(prevCategory)
 
-                val scores = g?.getScores(current)
+                val scores = g?.getScores(categories?.get(c))
                 if (scores?.isNotEmpty() == true) ScoreContent.loadData(scores)
                 else ScoreContent.reset()
 
