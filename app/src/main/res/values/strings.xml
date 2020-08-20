@@ -11,4 +11,6 @@
     <string name="field_blank">This field cannot be blank</string>
     <string name="field_exists">This field already exists</string>
     <string name="step2">Step 2: Add Scores</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
 </resources>

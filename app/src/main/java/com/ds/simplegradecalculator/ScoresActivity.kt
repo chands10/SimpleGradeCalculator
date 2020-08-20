@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_scores.*
@@ -23,7 +24,7 @@ class ScoresActivity : AppCompatActivity() {
 
         g = intent.getSerializableExtra(GRADES) as Grades?
         categories = g?.categories
-        setNextCategory()
+        setAdjacentCategory()
 
         scores_list.apply {
             layoutManager = LinearLayoutManager(this@ScoresActivity)
@@ -32,13 +33,13 @@ class ScoresActivity : AppCompatActivity() {
     }
 
     // Set layout element currentCategory
-    private fun setNextCategory(): Boolean {
-        val hasNext = categories?.hasNext() == true
-        if (hasNext) {
-            current = categories!!.next()
+    private fun setAdjacentCategory(previous: Boolean = false): Boolean {
+        val hasAdjacent = (if (previous) categories?.hasPrevious() else categories?.hasNext()) == true
+        if (hasAdjacent) {
+            current = if (previous) categories!!.previous() else categories!!.next()
             currentCategory.text = current
         }
-        return hasNext
+        return hasAdjacent
     }
 
     // Add Another button: adds another field to input text
@@ -48,6 +49,37 @@ class ScoresActivity : AppCompatActivity() {
             adapter?.notifyItemInserted(ScoreContent.size - 1)
             adapter?.notifyItemChanged(ScoreContent.size - 2) // Change keyboard button from Done to Next
             scrollToPosition(ScoreContent.size) // button
+        }
+    }
+
+    // TODO: Evaluate if error checking is needed
+    // save the scores of the current category inside Grades g
+    private fun saveScores() = g?.setScores(current, ScoreContent.ITEMS
+        .filter { it.score.toDoubleOrNull() != null }
+        .map { it.score.toDouble() })
+
+    // TODO: Implement
+    // Save current data in grades, set current to the previous category if available,
+    // and repopulate ScoreContent. If at beginning of categories then move back to MainActivity
+    fun prev(view: View) {}
+
+    // Save current data in grades, set current to the next category if available,
+    // and repopulate ScoreContent. If at end of categories then switch activities
+    fun next(view: View) {
+        // save current scores
+        saveScores()
+
+        // update current if relevant
+        val change = setAdjacentCategory()
+        if (change) { // repopulate data
+            val scores = g?.getScores(current)
+            if (scores?.isNotEmpty() == true) ScoreContent.loadData(scores)
+            else ScoreContent.reset()
+
+            scores_list.adapter?.notifyDataSetChanged() // TODO: look at making more specific
+        } else { // prepare for calculation
+            // TODO: else switch activities
+            Toast.makeText(applicationContext, g?.calculateGrade().toString(), Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -105,13 +137,18 @@ class ScoresActivity : AppCompatActivity() {
             addItem()
         }
 
+        fun reset() { // notify change after
+            ITEMS.clear()
+            addItem()
+        }
+
         fun addItem() { // notify change after
             ITEMS.add(ScoreItem())
         }
 
-        fun loadData(data: List<Double>) { // notify change after
+        fun loadData(data: List<Double>?) { // notify change after
             ITEMS.clear()
-            data.mapTo(ITEMS) { ScoreItem(it.toString()) }
+            data?.mapTo(ITEMS) { ScoreItem(it.toString()) }
         }
 
         data class ScoreItem(
