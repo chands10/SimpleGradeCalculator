@@ -18,6 +18,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 const val GRADES = "com.ds.simplegradecalculator.GRADES"
 
 class MainActivity : AppCompatActivity() {
+    private var oldGrades: Grades? = null // return oldGrades if going back from ScoresActivity
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -64,12 +65,21 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(applicationContext, getString(R.string.weightingError), Toast.LENGTH_SHORT).show()
             }
             if (g != null) {
+                // update g with data found in oldGrades
+                oldGrades?.categories?.forEach { g.setScores(it, oldGrades?.getScores(it)) }
+
                 val intent = Intent(this, ScoresActivity::class.java).apply {
                     putExtra(GRADES, g)
                 }
-                startActivity(intent)
+                startActivityForResult(intent, 1)
             }
         }
+    }
+
+    // set oldGrades
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == 1 && resultCode == RESULT_OK) oldGrades = data?.getSerializableExtra(GRADES) as Grades?
     }
 
     // Ensure the text fields are not empty or duplicates

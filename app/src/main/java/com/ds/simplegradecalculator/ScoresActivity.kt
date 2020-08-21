@@ -1,5 +1,6 @@
 package com.ds.simplegradecalculator
 
+import android.content.Intent
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -26,14 +27,14 @@ class ScoresActivity : AppCompatActivity() {
 
         g = intent.getSerializableExtra(GRADES) as Grades?
         categories = g?.categories
-        setAdjacentCategory()
+        makeChange()
 
         scores_list.apply {
             layoutManager = LinearLayoutManager(this@ScoresActivity)
             adapter = ScoreAdapter()
         }
 
-        callback = object: OnBackPressedCallback(false) {
+        callback = object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() = makeChange(true)
         }
         onBackPressedDispatcher.addCallback(this, callback as OnBackPressedCallback)
@@ -47,7 +48,6 @@ class ScoresActivity : AppCompatActivity() {
             currentCategory.text = categories!![c]
             if (c == categories?.lastIndex) nextButton.text = getString(R.string.calculate)
             else nextButton.text = getString(R.string.next)
-            callback?.isEnabled = c != 0
         }
         return hasAdjacent
     }
@@ -71,8 +71,8 @@ class ScoresActivity : AppCompatActivity() {
     // Save current data in grades, set current to the adjacent category if available,
     // and repopulate ScoreContent
     private fun makeChange(previous: Boolean = false) {
-        // save previous scores
-        saveScores(categories?.get(c))
+        // save previous scores if have not just entered activity
+        if (c >= 0) saveScores(categories?.get(c))
 
         // update current if relevant
         val change = setAdjacentCategory(previous)
@@ -95,9 +95,10 @@ class ScoresActivity : AppCompatActivity() {
                 }
             }
             previous -> { // go back to previous activity
-                // TODO: Consider passing Grades g back
-//                val intent = Intent(this, MainActivity::class.java)
-//                startActivity(intent)
+                val intent = Intent()
+                intent.putExtra(GRADES, g)
+                setResult(RESULT_OK, intent)
+                finish()
             }
             else -> { // prepare for calculation
                 // TODO: else switch activities
@@ -161,10 +162,6 @@ class ScoresActivity : AppCompatActivity() {
     object ScoreContent {
         val ITEMS = mutableListOf<ScoreItem>()
         val size get() = ITEMS.size
-
-        init {
-            addItem()
-        }
 
         fun addItem() { // notify change after
             ITEMS.add(ScoreItem())
