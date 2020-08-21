@@ -12,7 +12,7 @@ class GradesTest {
 
     @Before
     fun setUp() {
-        g.addScores("tests", listOf(100.0))
+        g.setScores("tests", listOf(100.0))
     }
 
     @Test
@@ -27,15 +27,15 @@ class GradesTest {
         Grades(mapOf("tests" to 33.3, "quizzes" to 33.3, "hws" to 33.3))
     }
 
-    @Test
-    fun testAddScores() {
-        assertNull(e.addScores("tests", listOf(99.0))) // empty grades
-        assertNull(f.addScores("quizzes", listOf(99.0))) // quizzes is not a category
-        assertEquals(false, f.addScores("tests", listOf())) // list does not change
-        assertEquals(true, f.addScores("tests", listOf(99.1, 100.0)))
-        assertNull(g.addScores(null, listOf(99.1)))
-        assertEquals(true, g.addScores("tests", listOf(0.0)))
-    }
+//    @Test
+//    fun testAddScores() {
+//        assertNull(e.addScores("tests", listOf(99.0))) // empty grades
+//        assertNull(f.addScores("quizzes", listOf(99.0))) // quizzes is not a category
+//        assertEquals(false, f.addScores("tests", listOf())) // list does not change
+//        assertEquals(true, f.addScores("tests", listOf(99.1, 100.0)))
+//        assertNull(g.addScores(null, listOf(99.1)))
+//        assertEquals(true, g.addScores("tests", listOf(0.0)))
+//    }
 
     @Test
     fun testCategories() {
@@ -62,21 +62,19 @@ class GradesTest {
 
     @Test
     fun testSetScores() {
-        assertNull(e.setScores("tests", listOf(100.0))) // empty grades
+        e.setScores("tests", listOf(100.0)) // empty grades
         assertNull(e.getScores("tests"))
 
-        assertNull(g.setScores("labs", listOf(100.0))) // labs is not a category
+        g.setScores("labs", listOf(100.0)) // labs is not a category
         assertNull(g.getScores("labs"))
 
-        assertNull(g.setScores(null, listOf(100.0)))
+        g.setScores(null, listOf(100.0))
         assertNull(g.getScores("labs"))
 
-        assertEquals(false, f.setScores("tests", listOf())) // empty list returned
-
-        assertEquals(true, g.setScores("quizzes", listOf(100.0))) // start with empty list
+        g.setScores("quizzes", listOf(100.0)) // start with empty list
         assertEquals(listOf<Double>(100.0), g.getScores("quizzes"))
 
-        assertEquals(true, g.setScores("tests", listOf(0.0, 50.0))) // initially [100.0]
+        g.setScores("tests", listOf(0.0, 50.0)) // initially [100.0]
         assertEquals(listOf(0.0, 50.0), g.getScores("tests")) // 100.0 is removed
     }
 
@@ -86,11 +84,11 @@ class GradesTest {
         assertEquals(100.0, f.calculateGrade(), 0.0) // category but no grades -> 100
         assertEquals(100.0, g.calculateGrade(), 0.0) // 100 in one category -> 100
 
-        g.addScores("tests", listOf(0.0))
+        g.setScores("tests", listOf(100.0, 0.0))
         assertEquals(50.0, g.calculateGrade(), 0.0) // 50 avg in one category -> 50
-        g.addScores("projects", listOf(100.0, 100.0))
+        g.setScores("projects", listOf(100.0, 100.0))
         assertEquals(62.5, g.calculateGrade(), 0.0) // test avg: 50, scale: .6/.8; project avg: 100, scale: .2/.8
-        g.addScores("quizzes", listOf(75.0, 25.0))
+        g.setScores("quizzes", listOf(75.0, 25.0))
         assertEquals(60.0, g.calculateGrade(), 0.0) // test avg: 50, project avg: 100, quiz avg: 50
     }
 }
