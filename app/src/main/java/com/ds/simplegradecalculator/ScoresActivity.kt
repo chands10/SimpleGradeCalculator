@@ -1,7 +1,5 @@
 package com.ds.simplegradecalculator
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -11,14 +9,17 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.Toast
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.activity_scores.*
 
 class ScoresActivity : AppCompatActivity() {
-    var categories: List<String>? = null // categories in grades
-    var c = -1 // current category index
-    var g: Grades? = null
+    private var categories: List<String>? = null // categories in grades
+    private var c = -1 // current category index
+    private var g: Grades? = null
+    private var callback: OnBackPressedCallback? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_scores)
@@ -31,6 +32,11 @@ class ScoresActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this@ScoresActivity)
             adapter = ScoreAdapter()
         }
+
+        callback = object: OnBackPressedCallback(false) {
+            override fun handleOnBackPressed() = makeChange(true)
+        }
+        onBackPressedDispatcher.addCallback(this, callback as OnBackPressedCallback)
     }
 
     // Set layout element currentCategory
@@ -41,6 +47,7 @@ class ScoresActivity : AppCompatActivity() {
             currentCategory.text = categories!![c]
             if (c == categories?.lastIndex) nextButton.text = getString(R.string.calculate)
             else nextButton.text = getString(R.string.next)
+            callback?.isEnabled = c != 0
         }
         return hasAdjacent
     }
@@ -89,8 +96,8 @@ class ScoresActivity : AppCompatActivity() {
             }
             previous -> { // go back to previous activity
                 // TODO: Consider passing Grades g back
-                val intent = Intent(this, MainActivity::class.java)
-                startActivity(intent)
+//                val intent = Intent(this, MainActivity::class.java)
+//                startActivity(intent)
             }
             else -> { // prepare for calculation
                 // TODO: else switch activities
@@ -100,8 +107,6 @@ class ScoresActivity : AppCompatActivity() {
     }
 
     // call makeChange(). If at beginning of categories then go to previous activity
-    override fun onBackPressed() = makeChange(true)
-
     fun prev(view: View) = onBackPressed()
 
     // Call makeChange(). If at end of categories then switch activities
