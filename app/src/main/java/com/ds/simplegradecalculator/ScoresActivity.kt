@@ -39,6 +39,8 @@ class ScoresActivity : AppCompatActivity() {
         if (hasAdjacent) {
             c = if (previous) c - 1 else c + 1
             currentCategory.text = categories!![c]
+            if (c == categories?.lastIndex) nextButton.text = getString(R.string.calculate)
+            else nextButton.text = getString(R.string.next)
         }
         return hasAdjacent
     }
