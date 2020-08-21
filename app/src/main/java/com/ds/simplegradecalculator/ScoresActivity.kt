@@ -61,7 +61,6 @@ class ScoresActivity : AppCompatActivity() {
         .filter { it.score.toDoubleOrNull() != null }
         .map { it.score.toDouble() })
 
-    // TODO: Tie back button to function
     // Save current data in grades, set current to the adjacent category if available,
     // and repopulate ScoreContent
     private fun makeChange(previous: Boolean = false) {
@@ -101,7 +100,9 @@ class ScoresActivity : AppCompatActivity() {
     }
 
     // call makeChange(). If at beginning of categories then go to previous activity
-    fun prev(view: View) = makeChange(true)
+    override fun onBackPressed() = makeChange(true)
+
+    fun prev(view: View) = onBackPressed()
 
     // Call makeChange(). If at end of categories then switch activities
     fun next(view: View) = makeChange()
