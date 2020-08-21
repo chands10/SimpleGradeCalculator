@@ -38,6 +38,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // Clear button: Clears all fields and adds an empty input field
+    fun clear(view: View) {
+        val s = CategoryContent.size
+        CategoryContent.ITEMS.clear()
+        categories_list.adapter?.notifyItemRangeRemoved(0, s)
+        CategoryContent.addItem()
+        categories_list.adapter?.notifyItemInserted(0)
+    }
+
     // Continue button: Verifies scores, creates Grades class, and continues onto the next page
     fun createGrades(view: View) {
         val rawGrades = mutableMapOf<String, Double>()

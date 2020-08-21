@@ -62,6 +62,15 @@ class ScoresActivity : AppCompatActivity() {
         }
     }
 
+    // Clear button: Clears all fields and adds an empty input field
+    fun clear(view: View) {
+        val s = ScoreContent.size
+        ScoreContent.ITEMS.clear()
+        scores_list.adapter?.notifyItemRangeRemoved(0, s)
+        ScoreContent.addItem()
+        scores_list.adapter?.notifyItemInserted(0)
+    }
+
     // TODO: Evaluate if error checking is needed
     // save the scores of the current category inside Grades g
     private fun saveScores(category: String?) = g?.setScores(category, ScoreContent.ITEMS
