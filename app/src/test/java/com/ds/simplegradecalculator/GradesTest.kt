@@ -76,6 +76,9 @@ class GradesTest {
 
         g.setScores("tests", listOf(0.0, 50.0)) // initially [100.0]
         assertEquals(listOf(0.0, 50.0), g.getScores("tests")) // 100.0 is removed
+
+        g.setScores("tests", null)
+        assertEquals(listOf(0.0, 50.0), g.getScores("tests")) // nothing changes
     }
 
     @Test

@@ -14,9 +14,8 @@ class Grades(rawGrades: Map<String, Double>): Serializable {
 
     private val grades = rawGrades.mapValues { Category(it.value) }
 
-    // should only be called once
     // LinkedHashMap preserves order of items inserted
-    val categories get() = grades.keys.toList()
+    val categories = grades.keys.toList()
 
     @Throws(RuntimeException::class)
     private fun checkRep(rawGrades: Map<String, Double>) {
@@ -34,8 +33,8 @@ class Grades(rawGrades: Map<String, Double>): Serializable {
     fun getScores(category: String?) = grades[category]?.scores
 
     // set [scores] to the grades class with key [category]
-    fun setScores(category: String?, scores: List<Double>) {
-        grades[category]?.scores = scores
+    fun setScores(category: String?, scores: List<Double>?) {
+        if (scores != null) grades[category]?.scores = scores
     }
 
     // calculate the total grade and return it
