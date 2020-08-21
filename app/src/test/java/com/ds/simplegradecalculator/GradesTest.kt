@@ -46,7 +46,7 @@ class GradesTest {
         assertEquals(listOf("tests"), fc)
 
         val gc = g.categories
-        assertEquals(listOf("projects", "quizzes", "tests"), gc)
+        assertEquals(listOf("tests", "projects", "quizzes"), gc)
     }
 
     @Test

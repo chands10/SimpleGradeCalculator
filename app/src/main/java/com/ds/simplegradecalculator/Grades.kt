@@ -3,22 +3,23 @@ package com.ds.simplegradecalculator
 import java.io.Serializable
 
 // [rawGrades] with category as key and weight as value and string [weightingError]
-class Grades(private val rawGrades: Map<String, Double>): Serializable {
+class Grades(rawGrades: Map<String, Double>): Serializable {
     // category with percentage of grade [weighting] and test grades [scores]
     private class Category(val weighting: Double): Serializable {
         var scores = listOf<Double>()
     }
     init {
-        checkRep()
+        checkRep(rawGrades)
     }
 
     private val grades = rawGrades.mapValues { Category(it.value) }
 
     // should only be called once
-    val categories get() = grades.keys.sorted()
+    // LinkedHashMap preserves order of items inserted
+    val categories get() = grades.keys.toList()
 
     @Throws(RuntimeException::class)
-    private fun checkRep() {
+    private fun checkRep(rawGrades: Map<String, Double>) {
         val sum = rawGrades.values.sum()
         if (rawGrades.isNotEmpty() && (sum < 99.89 || sum > 100.101)) {
             throw RuntimeException()
