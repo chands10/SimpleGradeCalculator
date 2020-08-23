@@ -160,12 +160,13 @@ class MainActivity : AppCompatActivity() {
                 mCategoryLabel?.addTextChangedListener(object: TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
+                    override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         val item = CategoryContent.ITEMS[adapterPosition]
-                        // only reset error when actual changes occur to text (error remains when device orientation changes)
                         val input = mCategoryLabel.text.toString()
+                        // only reset error when actual changes occur to text (error remains when device orientation changes)
                         if (item.categoryError == fieldExistsError && input != item.category) item.categoryError = null
-                        if (count > 0 && item.categoryError != fieldExistsError) item.categoryError = null
+                        // only reset error when non-blank changes occur to text (error remains when device orientation changes)
+                        if (!s.isNullOrBlank() && item.categoryError != fieldExistsError) item.categoryError = null
 
                         item.category = input
                     }
@@ -174,10 +175,10 @@ class MainActivity : AppCompatActivity() {
                 mWeightLabel?.addTextChangedListener(object: TextWatcher {
                     override fun afterTextChanged(p0: Editable?) {}
                     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) {}
-                    override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
+                    override fun onTextChanged(s: CharSequence?, p1: Int, p2: Int, p3: Int) {
                         val item = CategoryContent.ITEMS[adapterPosition]
-                        // only reset error when actual changes occur to text (error remains when device orientation changes)
-                        if (count > 0) item.weightError = null
+                        // only reset error when non-blank changes occur to text (error remains when device orientation changes)
+                        if (!s.isNullOrBlank()) item.weightError = null
 
                         item.weight = mWeightLabel.text.toString()
                     }
