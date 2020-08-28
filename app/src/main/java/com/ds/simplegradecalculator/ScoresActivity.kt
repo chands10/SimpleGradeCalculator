@@ -33,6 +33,7 @@ class ScoresActivity : AppCompatActivity() {
             adapter = ScoreAdapter()
         }
 
+        // call makeChange(). If at beginning of categories then go to previous activity
         callback = object: OnBackPressedCallback(true) {
             override fun handleOnBackPressed() = makeChange(true)
         }
@@ -116,9 +117,6 @@ class ScoresActivity : AppCompatActivity() {
             }
         }
     }
-
-    // call makeChange(). If at beginning of categories then go to previous activity
-    fun prev(view: View) = onBackPressed()
 
     // Call makeChange(). If at end of categories then switch activities
     fun next(view: View) = makeChange()
