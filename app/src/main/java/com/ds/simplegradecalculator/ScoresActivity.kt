@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
-import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -110,8 +109,10 @@ class ScoresActivity : AppCompatActivity() {
                 finish()
             }
             else -> { // prepare for calculation
-                // TODO: else switch activities
-                Toast.makeText(applicationContext, g?.calculateGrade().toString(), Toast.LENGTH_SHORT).show()
+                val intent = Intent(this, GradeActivity::class.java).apply {
+                    putExtra(GRADES, g)
+                }
+                startActivity(intent)
             }
         }
     }
