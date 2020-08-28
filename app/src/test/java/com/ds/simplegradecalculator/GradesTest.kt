@@ -27,16 +27,6 @@ class GradesTest {
         Grades(mapOf("tests" to 33.3, "quizzes" to 33.3, "hws" to 33.3))
     }
 
-//    @Test
-//    fun testAddScores() {
-//        assertNull(e.addScores("tests", listOf(99.0))) // empty grades
-//        assertNull(f.addScores("quizzes", listOf(99.0))) // quizzes is not a category
-//        assertEquals(false, f.addScores("tests", listOf())) // list does not change
-//        assertEquals(true, f.addScores("tests", listOf(99.1, 100.0)))
-//        assertNull(g.addScores(null, listOf(99.1)))
-//        assertEquals(true, g.addScores("tests", listOf(0.0)))
-//    }
-
     @Test
     fun testCategories() {
         val ec = e.categories

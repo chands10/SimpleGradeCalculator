@@ -25,10 +25,6 @@ class Grades(rawGrades: Map<String, Double>): Serializable {
         }
     }
 
-    // add a list of [scores] to [category]
-    // return true if successful else return false if list does not change and null otherwise
-//    fun addScores(category: String?, scores: List<Double>) = grades[category]?.scores?.addAll(scores)
-
     // return an immutable list of scores of a [category] to be viewed
     fun getScores(category: String?) = grades[category]?.scores
 

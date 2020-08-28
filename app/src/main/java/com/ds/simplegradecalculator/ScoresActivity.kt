@@ -71,7 +71,6 @@ class ScoresActivity : AppCompatActivity() {
         scores_list.adapter?.notifyItemInserted(0)
     }
 
-    // TODO: Evaluate if error checking is needed
     // save the scores of the current category inside Grades g
     private fun saveScores(category: String?) = g?.setScores(category, ScoreContent.ITEMS
         .filter { it.score.toDoubleOrNull() != null }
@@ -136,7 +135,6 @@ class ScoresActivity : AppCompatActivity() {
                 val item = ScoreContent.ITEMS[position]
                 holder.mScoreLabel?.apply {
                     setText(item.score)
-//                    error = item.scoreError
                     imeOptions =
                         if (position == itemCount - 2) EditorInfo.IME_ACTION_DONE else EditorInfo.IME_ACTION_NEXT
                 }
@@ -158,8 +156,6 @@ class ScoresActivity : AppCompatActivity() {
                     override fun onTextChanged(p0: CharSequence?, p1: Int, p2: Int, count: Int) {
                         val item = ScoreContent.ITEMS[adapterPosition]
                         item.score = mScoreLabel.text.toString()
-                        // only reset error when actual changes occur to text (error remains when device orientation changes)
-//                        if (count > 0) item.scoreError = null
                     }
                 })
             }
@@ -177,7 +173,6 @@ class ScoresActivity : AppCompatActivity() {
 
         data class ScoreItem(
             var score: String = ""
-//            var scoreError: String? = null
         )
     }
 }
