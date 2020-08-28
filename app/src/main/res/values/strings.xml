@@ -16,4 +16,5 @@
     <string name="empty">Empty scores will reweight categories</string>
     <string name="your_grade_is">Your grade is…</string>
     <string name="error">ERROR</string>
+    <string name="reset">Reset</string>
 </resources>

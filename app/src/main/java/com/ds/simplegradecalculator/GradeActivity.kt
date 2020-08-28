@@ -1,7 +1,9 @@
 package com.ds.simplegradecalculator
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.view.animation.AlphaAnimation
 import kotlinx.android.synthetic.main.activity_grade.*
 
@@ -19,5 +21,13 @@ class GradeActivity : AppCompatActivity() {
                 startAnimation(fadeIn)
             }
         }
+    }
+
+    // Clear all data and start over, reset back stack
+    fun reset(view: View) {
+        intent = Intent(this, MainActivity::class.java).apply {
+            flags = Intent.FLAG_ACTIVITY_CLEAR_TOP
+        }
+        startActivity(intent)
     }
 }
