@@ -8,9 +8,8 @@
 
     <TextView
         android:id="@+id/textView4"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="@string/your_grade_is"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textSize="24sp"
@@ -20,9 +19,8 @@
 
     <TextView
         android:id="@+id/gradeTextView"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:gravity="center"
         android:text="@string/error"
         android:textAppearance="@style/TextAppearance.AppCompat.Display4"
         android:textColor="?android:attr/textColorPrimary"
